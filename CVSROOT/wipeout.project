@@ -1,0 +1,155 @@
+
+class: DmDictionary id: 3892323550
+5 
+class: DmDictionary id: 3892323568
+4 
+class: Category id: 3892323392
+
+class: DmDictionary id: 3892323607
+4 
+class: DmString id: 3892323642
+2 e3 
+class: DmString id: 3892323641
+10 defaultExe 
+class: DmSet id: 3892323645
+1 
+class: DmString id: 3892323400
+2 e3 
+class: DmString id: 3892323648
+2 e3 
+class: DmString id: 3892323644
+11 executables 
+class: DmSet id: 3892323613
+3 
+class: DmRegex id: 3892323435
+3 *.C 
+class: DmRegex id: 3892323616
+3 *.C 
+class: DmRegex id: 3892323403
+4 *.cc 
+class: DmRegex id: 3892323623
+4 *.cc 
+class: DmRegex id: 3892323418
+5 *.cpp 
+class: DmRegex id: 3892323631
+5 *.cpp 
+class: DmString id: 3892323612
+10 extensions 
+class: DmString id: 3892323610
+10 CPP_source 
+class: DmString id: 3892323609
+4 name 
+class: DmString id: 3892323571
+10 CPP_source 
+class: Category id: 3892323451
+
+class: DmDictionary id: 3892323715
+4 
+class: DmString id: 3892323733
+2 e3 
+class: DmString id: 3892323732
+10 defaultExe 
+class: DmSet id: 3892323736
+1 
+class: DmString id: 3892323459
+2 e3 
+class: DmString id: 3892323739
+2 e3 
+class: DmString id: 3892323735
+11 executables 
+class: DmSet id: 3892323721
+1 
+class: DmRegex id: 3892323462
+3 *.c 
+class: DmRegex id: 3892323724
+3 *.c 
+class: DmString id: 3892323720
+10 extensions 
+class: DmString id: 3892323718
+8 C_source 
+class: DmString id: 3892323717
+4 name 
+class: DmString id: 3892323573
+8 C_source 
+class: Category id: 3892323478
+
+class: DmDictionary id: 3892323794
+4 
+class: DmString id: 3892323819
+2 e3 
+class: DmString id: 3892323818
+10 defaultExe 
+class: DmSet id: 3892323822
+1 
+class: DmString id: 3892323486
+2 e3 
+class: DmString id: 3892323825
+2 e3 
+class: DmString id: 3892323821
+11 executables 
+class: DmSet id: 3892323800
+2 
+class: DmRegex id: 3892323502
+3 *.H 
+class: DmRegex id: 3892323803
+3 *.H 
+class: DmRegex id: 3892323489
+3 *.h 
+class: DmRegex id: 3892323810
+3 *.h 
+class: DmString id: 3892323799
+10 extensions 
+class: DmString id: 3892323797
+6 Header 
+class: DmString id: 3892323796
+4 name 
+class: DmString id: 3892323575
+6 Header 
+class: Category id: 3892323518
+
+class: DmDictionary id: 3892323886
+4 
+class: DmString id: 3892323907
+2 e3 
+class: DmString id: 3892323906
+10 defaultExe 
+class: DmSet id: 3892323910
+1 
+class: DmString id: 3892323526
+2 e3 
+class: DmString id: 3892323913
+2 e3 
+class: DmString id: 3892323909
+11 executables 
+class: DmSet id: 3892323892
+1 
+class: DmRegex id: 3892323529
+6 *.java 
+class: DmRegex id: 3892323895
+6 *.java 
+class: DmString id: 3892323891
+10 extensions 
+class: DmString id: 3892323889
+4 Java 
+class: DmString id: 3892323888
+4 name 
+class: DmString id: 3892323577
+4 Java 
+class: DmString id: 3892323567
+10 categories 
+class: DmDictionary id: 3892323581
+0 
+class: DmString id: 3892323580
+11 directories 
+class: DmBag id: 3892323561
+0 
+class: DmString id: 3892323565
+5 files 
+class: DmBag id: 3892323555
+0 
+class: DmString id: 3892323559
+7 modules 
+class: DmString id: 3892323553
+6 Common 
+class: DmString id: 3892323552
+4 name 

@@ -1,0 +1,37 @@
+From fulup@fridu.sene.bzh  Thu Jan 15 15:49:06 1998
+Received: from fridu.sene.bzh (root@fridu.sene.bzh [200.200.200.200])
+	by fridu.sene.bzh (8.8.7/8.8.7) with ESMTP id PAA15102
+	for <fulup@fridu.sene.bzh>; Thu, 15 Jan 1998 15:49:01 +0100
+Received: from bilbo.iu-vannes.fr
+	by fridu.sene.bzh (fetchmail-4.3.2 POP3 run by fulup)
+	for <fulup@fridu.sene.bzh> (single-drop); Thu Jan 15 15:49:01 1998
+Received: (from fulup@localhost)
+	by bilbo.iu-vannes.fr (8.8.7/8.8.7) id JAA08438
+	for fulup; Thu, 15 Jan 1998 09:35:47 +0100
+Date: Thu, 15 Jan 1998 09:35:47 +0100
+From: "Philippe.Le-Foll + iup.gis.prof + mailens"  <fulup@bilbo.iu-vannes.fr>
+Message-Id: <199801150835.JAA08438@bilbo.iu-vannes.fr>
+To: fulup@bilbo.iu-vannes.fr
+Subject: common
+Status: RO
+
+# 01a, 14jan98,fulup written from Aglae app_deb
+#!source
+#	COMMANDE INTERNE appelee par d'autres scripts :
+#		commande `outil`
+#
+#	Ce script se contente de mettre en place le r�pertoire de base
+#	FRIDU_HOME ainsi que quelque alias
+#
+        if      ( $?FRIDU_HOME )  then
+                echo "L'environnement FRIDU_HOME semble deja charge"
+                echo "Utilisez 'unset FRIDU_HOME' pour le decharger"
+                exit (1)
+        endif                                   #  if ( $?FRIDU_HOME )
+
+        echo 'Common-3.01 accessible: build'
+	setenv	FRIDU_HOME	/usr/local/produits
+	setenv PATH "$JTCL_HOME/Common-3.01/bin:$PATH"
+        alias  build build.tcl -s
+        setenv ARCH_OS linux86
+

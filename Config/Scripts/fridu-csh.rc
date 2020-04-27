@@ -1,0 +1,52 @@
+# Example of cshrc for FRIDU organization
+
+# WARNING: I now use bash and this file is probabelly not update
+
+setenv ARCH_OS    linux86
+setenv JTCL_HOME  /pMaster/Fridu
+setenv FRIDU_HOME /pMaster/Fridu
+
+alias jTcl tclsh $JTCL_HOME/Rubicon-3.00/lib/jTcl/Tcl/searchPkgLang.jTcl
+alias jTk  wish  $JTCL_HOME/Rubicon-3.00/lib/jTcl/Tcl/searchPkgLang.jTcl
+alias build build.tcl -s
+
+setenv PATH "$JTCL_HOME/Rubicon-3.00/bin:/usr/local/bin:$PATH"
+
+setenv CLASSPATH .:./Classes:/usr/local/pMaster/web/java-1.0/lib/classes.zip
+setenv JAVA_HOME /usr/local/pMaster/web/java-1.0
+setenv CVSROOT /Master
+
+alias touch touch --no-create
+alias reps  'dirs'
+alias xtitle    'echo -n "]2;\!*]1;\!*"'
+alias more less
+
+set os = `uname -a | awk '{print $3}'`
+#if ("$os" != "5.4") then
+   if ($?TERM) then
+      if ("$TERM" == "xterm") then
+         set prompt="%S%m%s > "
+         xtitle $LOGNAME@`hostname` : `reps`
+         alias cd		'cd \!* ; set prompt="%S%m%s ? "; xtitle $LOGNAME@`hostname` : `reps`'
+         alias pushd	'pushd \!*; set prompt="%S%m%s ? "; xtitle $LOGNAME@`hostname` : `reps`'
+         alias popd	'popd \!*; set prompt="%S%m%s ? "; xtitle $LOGNAME@`hostname` : `reps`'
+      else
+         set prompt="%S%m%s:`reps`> "
+         alias cd		'cd \!* ; set prompt="%S%m%s:`reps`? "'
+         alias pushd	'pushd \!*; set prompt="%S%m%s:`reps`? "'
+         alias popd	'popd \!*; set prompt="%S%m%s:`reps`? "'
+      endif
+   endif
+
+# Divers alias
+
+alias ls	'ls -CF \!*'
+alias kill+	'set p=`ps|grep \!*| grep -v grep | head -1`; echo $p; kill $p[1]'
+
+alias checksum	'find . ! \( -type d -o -name \*.o -o -name \*.a -o -type l -o -name \*.gen \) -exec cksum {} \;'
+alias top10	'ps -auxww | head'
+alias dman	'nroff -man \!* | less'
+alias rsgrep      'find . \( -name "*" -a \! \( -type d \) \) -exec grep -i \!* {} /dev/null \; -o \( -name RCS \) -prune'
+alias vis	'vi `which \!*`'
+alias xfig      'xfig -specialtext -latexfonts -startlatexFont default'
+cd .

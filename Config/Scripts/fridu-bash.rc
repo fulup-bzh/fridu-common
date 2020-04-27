@@ -1,0 +1,152 @@
+#
+#  Copyright(c) 1996-98 FRIDU a Free Software Company [fridu@fridu.com]
+#
+# File      :   fridu-bash.rc last prodile to be called set path and prompt
+# Projet    :   config
+# SubModule :   none
+# Auteur    :   Fulup Ar Foll [fulup@fridu.com]
+#
+# Last
+#      Modification: Writen
+#      Author      : $Author: fulup $
+#      Date        : $Date: 1999/03/11 10:46:29 $
+#      Revision    : $Revision: 3.6 $
+#      Source      : $Source: /Master/Common/Config/Scripts/fridu-bash.rc,
+#      State       : $State: Exp $
+#
+# Modification History
+# ---------------------------
+# 01f,10mar99,fulup,added WIND_BASE
+# 01e,07nov98,fulup,adapted to new 5.2 arch
+# 01d,13jun98,fulup adapted to W95
+# 01c,23apr98,fulup minor clean up
+# 01b,06dec97,fulup adapted to new tree
+# 01a,09sep97,fulup,written
+
+
+# set fridu flag in order booster subwindow creation
+# --------------------------------------------------
+MAGIC=990310
+
+if test -z "$FRIDU"
+then 
+ export FRIDU=0
+fi
+
+if test "$FRIDU" -lt $MAGIC
+then
+ # when first logging logname is not set
+ export FRIDU=$MAGIC
+ export TEMP=/var/tmp
+ export CVSROOT=fridu:/Master
+
+ # Check host type and try to set some aceptable default
+ # ------------------------------------------------------
+ case $HOSTTYPE-$OSTYPE in
+  # depending if we are comming from tcsh or bash HOSTTYPE change
+  *86-?inux*)
+   export PMASTER=/home/pMaster
+   export PATH="$PMASTER/shadow/bin:/sbin:/usr/sbin:$PATH"
+   export ARCH_OS='linux86'
+   export CVSROOT=/Master
+   export MOZILLA_HOME=/opt/netscape-4.5
+   export WIND_BASE=/pMaster/tornado-1.01
+   ;;
+  *-solaris*)
+   export PMASTER=/opt
+   export LM_LICENSE_FILE=/opt/xray/licenses/license.dat
+   export PATH="$PMASTER/shadow/bin:/bin:/usr/5bin:/usr/X11R6.4/bin:/usr/bin:/usr/ccs/bin:$PATH"
+   export ARCH_OS='sun4-solaris2'
+   export LD_LIBRARY_PATH=$PMASTER/shadow/lib
+   export USR_MRI=/opt/xray
+   export WIND_BASE=/opt/tornado-1.01
+   ;;      
+  *win32*)
+   export PMASTER=c:/pMaster 
+   export PATH="$PMASTER/Fridu/Common-3.02/bin:$PATH"
+   export ARCH_OS='w95-vc'
+   ;;
+  alpha-?inux*)
+   export PMASTER=/usr/local
+   export PATH="$PMASTER/shadow/bin:$PMASTER/shadow/sbin:/sbin:/usr/sbin:$PATH"
+   export ARCH_OS='linuxAxp'
+   ;;
+  *)
+   echo   "Unknow architecture HOSTTYPE=$HOSTTYPE-$OSTYPE"
+   export PATH="$PMASTER/shadow/bin:/sbin:/usr/sbin:/usr/bin/X11:$PATH"
+   export ARCH_OS="Unknow"
+   ;;
+ esac
+
+ # set Fridu private env
+ # ---------------------
+ export FRIDU_TOP=$HOME/Vues
+ export FRIDU_HOME=$HOME/pMaster/$ARCH_OS
+ export CCDEBUG=1
+
+ # locate temp file outside of root dir
+ # ------------------------------------
+ export TMPDIR=$TEMP
+ export TCLLIBPATH="$FRIDU_HOME/shadow/bin"
+ export PATH=".:$FRIDU_HOME/shadow/bin:$PATH"
+ export LD_LIBRARY_PATH="$FRIDU_HOME/shadow/lib:$LD_LIBRARY_PATH"
+ export MANPATH=$FRIDU_HOME/shadow/man:$PMASTER/shadow/man:$MANPATH
+
+ # set cvs & editor values
+ # -----------------------
+ export EDITOR=jed
+ export LESSCHARSET=latin1
+ export LS_OPTIONS=-CF
+
+ # set Java default
+ # ----------------
+ export JDKHOME=/opt/shadow
+ CLASSPATH=".:./Classes"
+ for FILE in $PMASTER/shadow/classes/*.jar $PMASTER/shadow/classes/*.zip
+ # loop on all file in $PMASTER/shadow/classes and add it to classpath
+ do
+  CLASSPATH="$CLASSPATH:$FILE"
+ done
+ export CLASSPATH
+
+ # bash default beavior
+ # ---------------------
+  export FIGNORE=".bak ~ .swp CVS"
+
+fi  ;# end FRIDU
+
+# Alias as to be redone at each new window creation
+# --------------------------------------------------
+
+ # Xterm title managment
+ # ----------------------
+ case $TERM in
+ xterm*)
+   # display in top of xterm all enquiery and cmd num in prompt
+   # display cmd num and user_class in prompt
+   export PS1='\[]2;\h@\u:\w\]\! \$ '
+   cd .
+   ;;
+ dumb)
+   # display in top of xterm all enquiery and cmd num in prompt
+   # display cmd num and user_class in prompt
+   export PS1='\[]2;\h@$LOGNAME:\w\]\! \$ '
+   cd .
+   ;;
+ *)
+   # display host + pwd + user class
+   export PS1='\[\]\h:\w\$ '
+ esac
+
+ alias       Fridu='cd $FRIDU_TOP/Fridu'
+ alias     Products='cd $FRIDU_TOP/Products'
+ alias         build='build.tcl -s'
+ alias         top='top.tcl'
+ alias            h=history
+ alias        touch='touch --no-create'
+ alias      untouch='touch -d 0:0'
+ alias           rm=del.sh
+ alias         more=less
+ alias           ls='ls -CF'
+ alias         xfig='xfig -specialtext -latexfonts -startlatexFont default'
+

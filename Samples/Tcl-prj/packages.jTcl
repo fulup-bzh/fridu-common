@@ -1,0 +1,162 @@
+#!/bin/sh -f
+#
+# $Header. /Master/config/header/header.sh,v 1.2 1997/02/01 17.29.30 fulup Exp $
+#
+#  Copyright(c) 1996-97 FRIDU a Free Software Company [fridu@fridu.com]
+#
+# File      :   pakages.tcl Main Tcl entry
+# Projet    :   Fridu a Realtime Booster
+# SubModule :   jTcl Tcl package handler
+# Auteur    :   Fulup Ar Foll [fulup@fridu.com]
+#
+# Last
+#      Author      : $Author. fulup $
+#      Date        : $Date. 1997/02/01 17.29.30 $
+#      Revision    : $Revision. 1.2 $
+#      Source      : $Source. /Master/config/header/header.sh,v $
+#      State       : $State. Exp $
+#
+# Modification History
+# --------------------
+# 01c,23fmay7,fulup adapted to tclet
+# 01b,28feb97,fulup released jTcl
+# 01a,20sep97,fulup written
+#
+
+# dont include this file more than one
+# ------------------------------------
+if {![info exist JTCL.PACKAGE.LOADED]} \
+{
+ set JTCL.PACKAGE.LOADED TRUE
+
+ # Update package data base
+ # ------------------------------------------------
+  package ifneeded Tk 8.0 "import.Tk" 
+  package ifneeded Tk 4.2 "import.Tk" 
+
+
+  # Check if we take ilocal dev or production tree 
+  if {![catch {open $env(JTCL)/lang/Tcl/objectLang.tcl}]} \
+  {
+    set env(STATE) dev
+  } else {
+    set env(STATE) prod
+  }
+  
+  # This is a tclet prepare for asking good question to server
+  global embed_args
+  if [info exist embed_args(state)] \
+  {
+    set env(STATE) $embed_args(state)
+    set env(JTCL) ""
+  } 
+  
+  if {$env(STATE) == "dev"} \
+  {
+    # Use development version
+    set CT_CORE $env(JTCL)/lang/Tcl
+    set CT_DEMO $env(JTCL)/demo/Tcl
+    set CT_TCP  $env(JTCL)/tcp/Tcl
+    set CT_IC   $env(JTCL)/ic/Tcl
+    set CT_GO   $env(JTCL)/go/Tcl
+  } else { 
+    # Use production version
+    set CT_CORE   $env(JTCL)/lib/jTcl/Tcl
+    set CT_DEMO   $env(JTCL)/lib/jTcl/Tcl
+    set CT_TCP    $env(JTCL)/lib/jTcl/Tcl
+    set CT_IC     $env(JTCL)/lib/jTcl/Tcl
+    set CT_GO     $env(JTCL)/lib/jTcl/Tcl
+  }
+  
+  set JTCL_IND 0
+  array set JTCL_FILE \
+  "
+   lang.debug.2.0   $CT_CORE/debugLang.tcl
+   lang.do.2.0      $CT_CORE/doLang.tcl
+   lang.object.2.0  $CT_CORE/objectLang.tcl
+   lang.include.2.0 $CT_CORE/includeLang.tcl
+   lang.console.2.0 $CT_CORE/tkConLang.tcl
+  
+   tcp.channel.2.0  $CT_TCP/channelTcp.tcl
+   tcp.server.2.0   $CT_TCP/serverTcp.tcl
+   tcp.rpc.2.0      $CT_TCP/rpcTcp.tcl
+   tcp.httpd.2.0    $CT_TCP/httpdTcp.tcl
+  
+   ic.binder.2.0    $CT_IC/binderIc.tcl
+   ic.compound.2.0  $CT_IC/compoundIc.tcl
+   ic.error.2.0     $CT_IC/errorIc.tcl
+   ic.popup.2.0     $CT_IC/popupIc.tcl
+   ic.client.2.0    $CT_IC/clientIc.tcl
+   ic.dispatch.2.0  $CT_IC/dispatchIc.tcl
+   ic.help.2.0      $CT_IC/helpIc.tcl
+   ic.msg.2.0       $CT_IC/msgIc.tcl
+   ic.server.2.0    $CT_IC/serverIc.tcl
+   ic.rule.2.0      $CT_IC/ruleIc.tcl
+   ic.httpd.2.0     $CT_IC/httpdIc.tcl
+  
+   go.item.2.0      $CT_GO/Item.tcl
+   go.menu.2.0      $CT_GO/Menu.tcl
+  "
+  
+  # AS we use jInclude for laoding package we need it before anything else
+  # Note that when comming from a tclet jInclude should already be present
+  if {[info proc jInclude] == {}} \
+  {
+    uplevel #0 source $JTCL_FILE(lang.include.2.0) 
+    incr   JTCL_IND 
+    set    JTCL_IMPORTED(lang.include.2.0) $JTCL_IND
+  }
+  
+  # jTcl package importe routine check if product is already load
+  # and is not try to load it either from disk or from network
+  # -------------------------------------------------------------
+  proc import.jTcl {PATERN} \
+  {
+   global JTCL_IND
+   global JTCL_IMPORTED
+   global JTCL_FILE
+   global env
+   set    STATUS {}
+  
+   set LIST [array names JTCL_FILE $PATERN]
+  
+   if {$LIST == {}} \
+   {
+     error "WARNING: import.jTcl $PATERN fit no jTcl modules"
+   }
+  
+   foreach FILE $LIST \
+   {
+     # source as to be done at global level
+     if {! [info exists JTCL_IMPORTED($FILE)]} \
+     {
+       incr JTCL_IND 
+       set  JTCL_IMPORTED($FILE) $JTCL_IND
+       jInclude $JTCL_FILE($FILE)
+     }
+   } 
+  } ;# end import.class
+
+  # Check loaded modules under jTcl  
+  proc dump.jtcl {} \
+  {
+   global JTCL_IMPORTED
+   global JTCL_FILE
+  
+   puts "import.dump File->Order"
+   foreach SLOT [array names JTCL_IMPORTED]\
+   {
+     puts "$SLOT->$JTCL_FILE($SLOT):$JTCL_IMPORTED($SLOT)"
+   }
+  } ;# end dump.jtcl
+
+  # Dynamicaly load Tk under tclsh
+  proc import.Tk {} \
+  {
+    catch {
+      load /usr/X386/lib/libX11.so 
+      load /usr/X386/lib/libXt.so
+    }
+    load /usr/local/lib/libtk8.0.so Tk
+  }
+} ;# end if already loaded

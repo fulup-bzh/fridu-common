@@ -1,0 +1,201 @@
+#  Copyright(c) 1996 FRIDU a Free Software Company [fridu@fridu.com]
+#
+# File      :   README
+# Projet    :   Fridu 
+# SubModule :   HELP/DOC
+# Auteur    :   Fulup Ar Foll [fulup@fridu.com]
+#
+# Last
+#      Author      : $Author: fulup $
+#      Date        : $Date: 1999/03/19 18:04:32 $
+#      Revision    : $Revision: 3.2 $
+#      Source      : $Source: /Master/Common/HowTo/README.common,v $
+#      State       : $State: Exp $
+#
+# Modification History
+# --------------------
+01c,21mar98,fulup minor cleanup for 3.02
+01b,12jan97,fulup updated to 3.01 version
+01a,07nov97,fulup written
+
+Common tools are mandatory to compile Fridu project, they include makefile
+skeleton for Unix and NT base on gnu make tools as well as a make wrapper.
+
+In order using common tools you should:
+=======================================
+
+1) untar common.tgz distribution  in your
+   production tree, and set FRIDU_HOME environement variable
+   to whereever you untar common.tgz file.
+
+   ex:
+     export JTCL_HOME=/pMaster/Fridu
+     mkdir -p $JTCL_HOME
+     cd       $JTCL_HOME
+     tar -xzf common.tgz
+
+
+2) update you global user enviroment 
+   an example for bash shell is provides in Common-xxx/include/fridu.rc
+   you can adapt it to your configuration and then source it
+   in /etc/bashrc (redhat) or in your $HOME/.bashrc
+
+How to use
+============
+
+ In order using Fridu common skeleton your development tree should
+ be organized in Top/Projet(s)/Module(s) directories.
+ 
+ By convention TOP is your development directory entry, you can
+ have more than one top, but when compiling all object+lib+bin
+ will be moved in current TOP/Exe/.... files.
+ 
+ General directories organization should be as follow and Exe
+ directory is mandatory for compiling.
+
+ TOP /Exe/$ARCH_OS/bin
+     |            /obj
+     |            /lib
+     |            /etc
+     |            /include
+     |
+     /Project1/Module-1.1
+     |        /Module-1.2
+     |
+     /Projetc2/Module-2.1
+     
+ 
+ Note:
+   1:Top is not a fix directory and will be recomputed by make wrapper
+     for each new compilation cycle.
+   2:ARCH_OS is a mandatory environement variable and
+     should set in your fridu.rc bash startup file.
+
+    ARCH_OS  -> your architecture currentely fridu support
+                linux86       Linux under X86
+                linuxApx      Linux Alpha
+                ntx86-gnu     NT X86 with cygnus tools
+                ntx86-msvc    NT X86 with Microsift C
+                sun4-solaris2 Sun Solaris 2.X under Sparc
+                sun4-sunos4   Sun old Sunos 4.1.x
+                aix35         Aix 3.5
+   3:You can add any other architecture in TOP/Common/Config/arch
+
+
+HOW to recompile Common tools (when not starting from binary version)
+=====================================================================
+
+ 1: set your ARCH_OS variable depending on your architecture
+ 
+ 2: add build.tcl directory in your PATH or copy this file in 
+    in a directory present in your path. In any case command
+    which build.tcl SHOULD NOT return "which: no build.tcl in $PATH"
+ 
+ 3: recompile cproto.c cecho.c cdepend.c ccat.c and place it in your path
+
+    ex:
+      cd $TOP/Common/Tools/src/Fridu
+      gcc cproto.c -O -oA_DIR_IN_YOUR_PATH/cproto
+ 
+ 4: place build.tcl and top.tcl in your path
+      cp $TOP/Common/Script/*.tcl /usr/local/bin
+   
+ 5: then you should be able to recompile fridu tools with fridu tools
+
+    build.tcl -s clean
+    build.tcl -s proto
+     >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
+     >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
+     >extracting depend from shadow.c
+     >extracting depend from cproto.c
+     >extracting c proto from cproto.c
+     >extracting c proto from shadow.c
+
+    Note: Is this fail check for your $TOP/Exe organization
+
+    build.tcl -s      
+     >switching to Common-3.00/15
+     >compiling cproto.c [linux86, -O3]
+     >binMaking /home/fridu/fulup/Vues/Exe/linux86/bin/cproto
+
+    build.tcl -s install
+
+
+  Note: It is not possible to start directelly with build.tcl 
+  because build proto use cproto, and Build.mk use build.tcl
+  and ...
+  
+  
+Alisasing
+----------
+
+    In order simplifying command you cant alias build.tcl -s to build
+    ex: alias build "build.tcl -s"
+
+Exemple of startup file
+-----------------------
+ 
+    If you run bash you can source fridu.rc in your .bashrc
+    under Linux redhat you can just copy it in /etc/bashrc
+    ex: ln -s /pMaster/Fridu/Common-3.02/include/fridu.rc /etc/bashrc
+ 
+    or add in your .bashrc
+    
+       source /pMaster/Fridu/Common-3.02/include/fridu.rc
+       
+    WARNING: fridu.rc file need to be adapted to your site
+
+General Fridu project organization
+---------------------------------
+
+  Project are organize in project/modules all project are placed
+  under $TOP directory, this directory can be a CVS and RCS vues.
+  all compilation result are place in $TOP/Exe tree
+
+  TOP/Project1
+     /Project2
+     /etc/linux86/bin     (where to place link result)
+                 /obj     (where to place compilation result)
+                 /include (where to place ansi proto)
+                 /lib     (where to place library and dll)
+                 /etc     (whre to place depandencies)
+
+  TOP/Project/Etc         (contents project global compilation
+                           and installation options)
+             /module1
+             /module2
+
+  TOP/Project/module/Etc  (contents module name that is use at installation)
+
+
+When installing [build.tcl -s install]
+
+  all project is installed in PMASTER/Project-Name (define in Etc/project.mk)
+  all files are regouped by familly
+
+  PMASTER/Project-Name/bin     (exe files binary+scripts)
+                      /lib     (lib file)
+                      /include (ansi C include file + rc files) 
+                      /lib     (all script and non specific to arch files)
+
+  PMASTER/Project-Name/lib/module1
+                          /module2
+
+  PMASTER/Project-Name/lib/module-name (as define in Etc/module.mk)
+                                      /Tcl  (jTcl file)
+                                      /Html (Html files)
+                                      /Demo (demo startup file)
+                                      etc ....
+
+BUGS
+----
+
+- build.tcl as to be in path in order recursive make to work
+- Tools/src/posix is usually useless for many GNU equiped architecture
+  if you have trouble recompling it just remove directory
+  before "build.tcl -s install".
+- all Etc files start now with an upper case in order translating
+  from previous versions use: convert2v3-01.sh
+
+  
+support fulup@iu-vannes.fr or fulup@fridu.com

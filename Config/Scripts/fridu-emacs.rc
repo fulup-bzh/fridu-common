@@ -1,0 +1,66 @@
+;;; Emacs fulup startup file
+
+(add-hook 'c-mode-hook    'turn-on-font-lock)
+(add-hook 'tcl-mode-hook  'turn-on-font-lock)
+(add-hook 'java-mode-hook 'turn-on-font-lock)
+(add-hook 'c++-mode-hook  'turn-on-font-lock)
+(add-hook 'makefile-mode-hook 'turn-on-font-lock)
+
+(global-set-key "%" 'match-paren)
+(defun match-paren (arg)
+"Go to the matching parenthesis if on parenthesis otherwise insert %."
+(interactive "p")
+(cond ((looking-at "\\s\(") (forward-list 1) (backward-char 1))
+      ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
+      (t (self-insert-command (or arg 1)))))
+
+
+;;; ********************
+;;; Load the auto-save.el package, which lets you put all of your autosave
+;;; files in one place, instead of scattering them around the file system.
+;;;
+(setq auto-save-directory (expand-file-name "~/autosave/")
+      auto-save-directory-fallback auto-save-directory
+      auto-save-hash-p nil
+      efs-auto-save t
+      efs-auto-save-remotely nil
+      ;; now that we have auto-save-timeout, let's crank this up
+      ;; for better interactive response.
+      auto-save-interval 2000
+      )
+;; We load this afterwards because it checks to make sure the
+;; auto-save-directory exists (creating it if not) when it's loaded.
+(require 'auto-save)
+
+;;; autoload jTcl 
+;;; ----------------
+(setq auto-mode-alist
+      (append '(("\\.jTcl$"  . tcl-mode)
+      ("\\.cc$" . c++-mode)
+      ("\\.cxx$" . c++-mode)
+      ("\\.def$" . c++-mode)
+      ("\\.c$"  . c-mode)
+      ("\\.h$"  . c-mode)
+      ("\\.i$"  . c-mode))
+      auto-mode-alist))
+										    
+
+;; Options Menu Settings
+;; =====================
+(cond
+ ((and (string-match "XEmacs" emacs-version)
+       (boundp 'emacs-major-version)
+       (or (and
+            (= emacs-major-version 19)
+            (>= emacs-minor-version 14))
+           (= emacs-major-version 20))
+       (fboundp 'load-options-file))
+  (load-options-file "/home/fridu/fulup/.xemacs-options")))
+;; ============================
+;; End of Options Menu Settings
+(custom-set-variables
+ '(user-mail-address "fulup@fridu.sene.bzh" t)
+ '(query-user-mail-address nil))
+(custom-set-faces)
+
+(setq minibuffer-max-depth nil)

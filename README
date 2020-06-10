@@ -82,34 +82,34 @@ How to use
    3:You can add any other architecture in TOP/Common/Config/arch
 
 
-HOW to recompile Common tools (when not starting from binary version)
+Bootstraping jCommon tools (when not starting from binary version)
 =====================================================================
 
- 1: set your ARCH_OS variable depending on your architecture
+ 1: set your ARCH_OS variable for Linux
+   export ARCH_OS=linux86
  
- 2: add build.tcl directory in your PATH or copy this file in 
-    in a directory present in your path. In any case command
-    which build.tcl SHOULD NOT return "which: no build.tcl in $PATH"
- 
- 3: recompile cproto.c cecho.c cdepend.c ccat.c and place it in your path
+ 2: recompile cproto.c cecho.c cdepend.c ccat.c and place it in your path
 
     ex:
-      cd $TOP/Common/Tools/src/Fridu
-      gcc cproto.c -O -oA_DIR_IN_YOUR_PATH/cproto
+      cd $TOP/jCommon/Tools/src/Fridu
+      gcc cproto.c -O -o/usr/local/bin/cproto
+      gcc shadow.c -O -o/usr/local/bin/shadow
+      gcc cecho.c  -O -o/usr/local/bin/cecho
+      gcc cdepend.c -O -o/usr/local/bin/cdepend
  
- 4: place build.tcl and top.tcl in your path
-      cp $TOP/Common/Script/*.tcl /usr/local/bin
+ 3: place build.tcl and top.tcl in your path
+      cp jCommon/Tools/src/fridu/config/Scripts/top.tcl /usr/local/bin
+      cp jCommon/Tools/src/fridu/config/Scripts/build.tcl /usr/local/bin
    
- 5: then you should be able to recompile fridu tools with fridu tools
-
-    build.tcl -s clean
-    build.tcl -s proto
-     >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
-     >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
-     >extracting depend from shadow.c
-     >extracting depend from cproto.c
-     >extracting c proto from cproto.c
-     >extracting c proto from shadow.c
+ 4: then you should be able to recompile fridu tools with fridu tools
+     build.tcl -s clean
+     build.tcl -s proto
+      >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
+      >/home/fridu/fulup/Vues/Common/Config/makeSkel/rules.mk:62 ...
+      >extracting depend from shadow.c
+      >extracting depend from cproto.c
+      >extracting c proto from cproto.c
+      >extracting c proto from shadow.c
 
     Note: Is this fail check for your $TOP/Exe organization
 
@@ -120,6 +120,7 @@ HOW to recompile Common tools (when not starting from binary version)
 
     build.tcl -s install
 
+  2: add within your path the directory where jCommon tools have be installed ex: $HOME/pMaster/jCommon-xxx
 
   Note: It is not possible to start directelly with build.tcl 
   because build proto use cproto, and Build.mk use build.tcl
